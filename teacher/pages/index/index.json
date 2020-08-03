@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "form": "/pages/form/form",
+    "teachers": "/pages/register/register"
+  }
+}

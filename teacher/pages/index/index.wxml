@@ -1,0 +1,22 @@
+<form wx:if="{{PageCur=='form'}}"></form>
+<teachers wx:if="{{PageCur=='teachers'}}"></teachers>
+<view class="box">
+  <view class="cu-bar tabbar bg-white">   
+    <view class="action" bindtap="NavChange" data-cur="form">
+      <view class="cuIcon-cu-image">
+        <image src="/images/tabbar/component{{PageCur=='form'?'_cur':''}}.png"></image>
+      </view>
+      <view class="{{PageCur=='form'?'text-olive':'text-gray'}}">找家教</view>
+    </view>
+     <view class="action text-gray add-action">
+    <button class="cu-btn cuIcon-friend {{PageCur=='teachers'?'bg-purple':'bg-olive'}} shadow" bindtap='goto'></button>
+    查看家教
+  </view>
+    <view class="action" bindtap="NavChange" data-cur="teachers">
+      <view class="cuIcon-cu-image">
+        <image src="/images/tabbar/about{{PageCur=='teachers'?'_cur':''}}.png"></image>
+      </view>
+      <view class="{{PageCur=='teachers'?'text-purple':'text-gray'}}">加入我们</view>
+    </view>
+  </view>
+	</view>
