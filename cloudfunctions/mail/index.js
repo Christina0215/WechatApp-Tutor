@@ -35,7 +35,7 @@ exports.main = async(event, context) => {
     // 主题
     subject: '！有人申请当家教！',
     // 收件人
-    to: '2284298778@qq.com',
+    to: '876143045@qq.com',
     // 邮件内容，text或者html格式
     text: "教师姓名:"+event.Name+"\r\n"+"教师性别:"+event.tsGender+"\r\n"+"电话:"+event.Phone+"\r\n"+"高校:"+event.School+"\r\n"+"专业:"+event.Subject+"\r\n"+"QQ:"+event.QQ+"\r\n"+"自我介绍:"+event.Information+"\r\n",
   }

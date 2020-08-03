@@ -13,26 +13,27 @@
 </swiper>
 <view class="VerticalBox">
   <scroll-view class="VerticalNav nav" scroll-y scroll-with-animation scroll-top="{{VerticalNavTop}}" style="height:calc(100vh - 375rpx)">
-    <view class="cu-item {{index==TabCur?'text-green cur':''}}" wx:for="{{list}}" wx:key bindtap='tabSelect' data-id="{{index}}">
+    <view class="cu-item {{index==TabCur?'text-green cur':''}}" wx:for="{{teachersList_all}}" wx:key bindtap='tabSelect' data-id="{{index}}">
       {{item.name}}
     </view>
   </scroll-view>
   <scroll-view class="VerticalMain" scroll-y scroll-with-animation style="height:calc(100vh - 375rpx)" scroll-into-view="main-{{MainCur}}" bindscroll="VerticalMain">
-    <view class="padding-top padding-lr" wx:for="{{list}}" wx:key id="main-{{index}}">
+    <view class="padding-top padding-lr" wx:for="{{teachersList_all}}" wx:key id="main-{{index}}">
       <view class='cu-bar solid-bottom bg-white'>
         <view class='action'>
           <text class='cuIcon-title text-green'></text> {{item.name}} </view>
       </view>
-      <view class="cu-list menu-avatar">
+      <view class="cu-list menu-avatar" wx:for="{{item.data}}" wx:for-item="data">
         <view class="cu-item">
-          <view class="cu-avatar round lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg);"></view>
+          <view class="cu-avatar round lg" style="background-image:url({{data.Cloudpath}});"></view>
           <view class="content">
-            <view class="text-grey">凯尔</view>
+            <view class="text-grey">{{data.Name}}
             <view class="text-gray text-sm flex">
-              <text class="text-cut">
-										<text class="cuIcon-infofill text-red  margin-right-xs"></text> 我已天理为凭，踏入这片荒芜，不再受凡人的枷锁遏制。我已天理为凭，踏入这片荒芜，不再受凡人的枷锁遏制。
+             <text class="text-cut">
+										<text class="margin-right-xs"></text>  ({{data.School}})
               </text>
             </view>
+          </view>
           </view>
         </view>
       </view>

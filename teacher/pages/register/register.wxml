@@ -48,7 +48,7 @@
 		</picker>
 	</view>
 	<view class="cu-form-group">
-		<textarea maxlength="-1" disabled="{{modalName!=null}}" bindinput="textareaAInput" placeholder="请填写自我介绍,擅长学科等,该填写会展示在教师信息处" name="Information"></textarea>
+		<textarea maxlength="-1" disabled="{{modalName!=null}}" bindinput="textareaAInput" placeholder="请填写自我介绍" name="Information"></textarea>
 	</view>
   <view class="cu-bar bg-white margin-top">
 		<view class="action">

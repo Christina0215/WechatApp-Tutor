@@ -14,6 +14,7 @@ Page({
     imgList: [],
     textareaAValue: '',
     textareaBValue: '',
+    Cloudpath:''
   },
   NavChange(e) {
     this.setData({
@@ -134,7 +135,7 @@ Page({
   ChooseImage() {
     wx.chooseImage({
       count: 1, //默认9
-      sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
+      sizeType: ['compressed'], //可以指定是原图还是压缩图，默认二者都有
       sourceType: ['album'], //从相册选择
       success: (res) => {
         if (this.data.imgList.length != 0) {
@@ -171,6 +172,7 @@ Page({
     })
   },
   formSubmit: function (e) {
+    wx.showLoading({title: '提交中'})
     const Register = true;
     const Good_at = [this.data.multiArray[0][this.data.multiIndex[0]],this.data.multiArray[1][this.data.multiIndex[1]],this.data.multiArray[2][this.data.multiIndex[2]]];
     let { Name, Gender, Phone, School, Subject,QQ,Information } = e.detail.value;
@@ -186,38 +188,7 @@ Page({
       Information,
     })
     wx.cloud.init()
-    const db = wx.cloud.database()
-     db.collection('Teachers').add({
-       data: {
-        Name, 
-        tsGender, 
-        Phone, 
-        School, 
-        Subject,
-        QQ,
-        Good_at,
-        Information,
-       },
-       success: res => {
-         // 在返回结果中会包含新创建的记录的 _id
-         this.setData({
-           counterId: res._id,
-           Name, 
-        tsGender, 
-        Phone, 
-        School, 
-        Subject,
-        QQ,
-        Good_at,
-        Information,
-         })
-         wx.showToast({
-           title: '提交成功',
-         })
-         console.log('[数据库] [新增记录] 成功，记录 _id: ', res._id)
-       },
-  })
-  const filePath = this.data.imgList[0]
+    const filePath = this.data.imgList[0]
         
         // 上传图片
         const cloudPath = Name + QQ + filePath.match(/\.[^.]+?$/)
@@ -230,6 +201,31 @@ Page({
             app.globalData.fileID = res.fileID
             app.globalData.cloudPath = cloudPath
             app.globalData.imagePath = filePath
+            this.setData({
+              Cloudpath:res.fileID
+            })
+            let imgfile = res.fileID
+            const db = wx.cloud.database()
+     db.collection('Teachers').add({
+       data: {
+        Name, 
+        tsGender, 
+        Phone, 
+        School, 
+        Subject,
+        QQ,
+        Good_at,
+        Information,
+        Cloudpath:imgfile
+       },
+       success: res => {
+        wx.hideLoading()
+         wx.showToast({
+           title: '提交成功',
+         })
+         console.log('[数据库] [新增记录] 成功，记录 _id: ', res._id)
+       },
+  })
           },
           fail: e => {
             console.error('[上传文件] 失败：', e)

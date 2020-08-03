@@ -7,19 +7,46 @@ Page({
     TabCur: 0,
     MainCur: 0,
     VerticalNavTop: 0,
-    list: [],
     load: true,
     openid:'',
+    teachersList_all:[{
+      id:0,
+      name:'数学',
+      data:[]
+},{
+      id:1,
+      name:'语文',
+      data:[]
+},{
+      id:2,
+      name:'英语',
+      data:[]
+},{
+      id:3,
+      name:'物理',
+      data:[]
+},{
+      id:4,
+      name:'化学',
+      data:[]
+},{
+      id:5,
+      name:'生物',
+      data:[]
+},{
+      id:6,
+      name:'历史',
+      data:[]
+},{
+      id:7,
+      name:'地理',
+      data:[]
+},{
+      id:8,
+      name:'政治',
+      data:[]
+}],
     teachersList:'',
-    teachersList_math:[],
-    teachersList_chinese:[],
-    teachersList_english:[],
-    teachersList_physic:[],
-    teachersList_biologic:[],
-    teachersList_chemistry:[],
-    teachersList_history:[],
-    teachersList_geography:[],
-    teachersList_politic:[],
   },
   onLoad() {
     wx.cloud.init()
@@ -38,24 +65,6 @@ Page({
         console.error('[云函数] [login] 调用失败', err)
       }
     })
-    let list = [{}];
-    for (let i = 0; i < 9; i++) {
-      list[i] = {};
-      list[i].id = i;
-    }
-    list[0].name = '数学';
-    list[1].name = '语文';
-    list[2].name = '英语';
-    list[3].name = '物理';
-    list[4].name = '化学';
-    list[5].name = '生物';
-    list[6].name = '历史';
-    list[7].name = '地理';
-    list[8].name = '政治';
-    this.setData({
-      list: list,
-      listCur: list[0]
-    })
     const db = wx.cloud.database()
      // 查询当前用户所有的 counters
      db.collection('Teachers').where({
@@ -65,7 +74,18 @@ Page({
          this.setData({
            teachersList: res.data
          })
-         console.log('[数据库] [查询记录] 成功: ', res)
+         this.teachersSelectMath();
+         this.teachersSelectBiologic();
+         this.teachersSelectChemistry();
+         this.teachersSelectChinese();
+         this.teachersSelectEnglish();
+         this.teachersSelectGeography();
+         this.teachersSelectHistory();
+         this.teachersSelectPolitic();
+         this.teachersSelectphysic();
+         this.getfile();
+         console.log(this.data.teachersList_all)
+         console.log('[数据库] [查询记录] 成功: ',res)
        },
        fail: err => {
          wx.showToast({
@@ -74,10 +94,141 @@ Page({
          })
          console.error('[数据库] [查询记录] 失败：', err)
        }
-     })
+     })   
+     //console.log(this.data.teachersList_math);
   },
-  teachersSelect(){
-    this.data.
+  getfile(){
+    for(let i=0;i<9;i++)
+    {
+      for(let j=0;j<this.data.teachersList_all[i].data.length;j++)
+      {
+        wx.cloud.getTempFileURL({
+          fileList: [this.data.teachersList_all[i].data[j].Cloudpath],
+          success: res => {
+            // fileList 是一个有如下结构的对象数组
+            // [{
+            //    fileID: 'cloud://xxx.png', // 文件 ID
+            //    tempFileURL: '', // 临时文件网络链接
+            //    maxAge: 120 * 60 * 1000, // 有效期
+            // }]
+            let temp = this.data.teachersList_all
+            temp[i].data[j].Cloudpath = res.fileList[0].tempFileURL
+            this.setData({
+              teachersList_all:temp
+            })
+          },
+          fail: console.error
+        })
+      }
+    }
+  },
+  teachersSelectMath(){
+    let assest = [];
+    let tar = this.data.teachersList_all;
+    Object.keys(this.data.teachersList).forEach(element => {
+      if(Object.values(this.data.teachersList)[element].Good_at.indexOf("数学")!=-1)
+        assest.push(Object.values(this.data.teachersList)[element])  
+    });
+    tar[0].data = assest;
+    this.setData({
+      teachersList_all:tar
+    })
+  },
+  teachersSelectChinese(){
+    let assest = [];
+    let tar = this.data.teachersList_all;
+    Object.keys(this.data.teachersList).forEach(element => {
+      if(Object.values(this.data.teachersList)[element].Good_at.indexOf("语文")!=-1)
+        assest.push(Object.values(this.data.teachersList)[element])  
+    });
+    tar[1].data = assest;
+    this.setData({
+      teachersList_all:tar
+    })
+  },
+  teachersSelectEnglish(){
+    let assest = [];
+    let tar = this.data.teachersList_all;
+    Object.keys(this.data.teachersList).forEach(element => {
+      if(Object.values(this.data.teachersList)[element].Good_at.indexOf("英语")!=-1)
+        assest.push(Object.values(this.data.teachersList)[element])  
+    });
+    tar[2].data = assest;
+    this.setData({
+      teachersList_all:tar
+    })
+  },
+  teachersSelectphysic(){
+    let assest = [];
+    let tar = this.data.teachersList_all;
+    Object.keys(this.data.teachersList).forEach(element => {
+      if(Object.values(this.data.teachersList)[element].Good_at.indexOf("物理")!=-1)
+        assest.push(Object.values(this.data.teachersList)[element])  
+    });
+    tar[3].data = assest;
+    this.setData({
+      teachersList_all:tar
+    })
+  },
+  teachersSelectBiologic(){
+    let assest = [];
+    let tar = this.data.teachersList_all;
+    Object.keys(this.data.teachersList).forEach(element => {
+      if(Object.values(this.data.teachersList)[element].Good_at.indexOf("生物")!=-1)
+        assest.push(Object.values(this.data.teachersList)[element])  
+    });
+    tar[4].data = assest;
+    this.setData({
+      teachersList_all:tar
+    })
+  },
+  teachersSelectChemistry(){
+    let assest = [];
+    let tar = this.data.teachersList_all;
+    Object.keys(this.data.teachersList).forEach(element => {
+      if(Object.values(this.data.teachersList)[element].Good_at.indexOf("化学")!=-1)
+        assest.push(Object.values(this.data.teachersList)[element])  
+    });
+    tar[5].data = assest;
+    this.setData({
+      teachersList_all:tar
+    })
+  },
+  teachersSelectHistory(){
+    let assest = [];
+    let tar = this.data.teachersList_all;
+    Object.keys(this.data.teachersList).forEach(element => {
+      if(Object.values(this.data.teachersList)[element].Good_at.indexOf("历史")!=-1)
+        assest.push(Object.values(this.data.teachersList)[element])  
+    });
+    tar[6].data = assest;
+    this.setData({
+      teachersList_all:tar
+    })
+  },
+  teachersSelectGeography(){
+    let assest = [];
+    let tar = this.data.teachersList_all;
+    Object.keys(this.data.teachersList).forEach(element => {
+      if(Object.values(this.data.teachersList)[element].Good_at.indexOf("地理")!=-1)
+        assest.push(Object.values(this.data.teachersList)[element])  
+    });
+    tar[7].data = assest;
+    this.setData({
+      teachersList_all:tar
+    })
+  },
+  teachersSelectPolitic(){
+    let assest = [];
+    let tar = this.data.teachersList_all;
+    Object.keys(this.data.teachersList).forEach(element => {
+      if(Object.values(this.data.teachersList)[element].Good_at.indexOf("政治")!=-1)
+        assest.push(Object.values(this.data.teachersList)[element])  
+    });
+    tar[8].data = assest;
+    this.setData({
+      teachersList_all:tar
+    })
   },
   onReady() {
     wx.hideLoading()
@@ -91,7 +242,7 @@ Page({
   },
   VerticalMain(e) {
     let that = this;
-    let list = this.data.list;
+    let list = this.data.teachersList_all;
     let tabHeight = 0;
     if (this.data.load) {
       for (let i = 0; i < list.length; i++) {
@@ -106,7 +257,7 @@ Page({
       }
       that.setData({
         load: false,
-        list: list
+        teachersList_all: list
       })
     }
     let scrollTop = e.detail.scrollTop + 20;
@@ -119,5 +270,16 @@ Page({
         return false
       }
     }
-  }
+  },
+  showModal(e) {
+    console.log("111")
+    this.setData({
+      modalName: e.currentTarget.dataset.target
+    })
+  },
+  hideModal(e) {
+    this.setData({
+      modalName: null
+    })
+  },
 })
